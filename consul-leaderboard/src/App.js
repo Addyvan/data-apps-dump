@@ -10,10 +10,10 @@ import Leaderboard from "./components/Leaderboard"
 import {
   Container,
   Row,
-  Col, 
-  Dropdown, 
-  DropdownToggle, 
-  DropdownMenu, 
+  Col,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
   DropdownItem,
   InputGroupAddon
 } from "reactstrap";
@@ -207,7 +207,7 @@ class App extends Component {
           <Col md="8"></Col>
           <Col md="4">
             <Row>
-              <InputGroupAddon addonType="prepend" style={{marginLeft: "20px"}}>When: </InputGroupAddon>
+              <InputGroupAddon addonType="prepend">When: </InputGroupAddon>
               <Dropdown isOpen={this.state.timeDropdownOpen} toggle={() => this.toggle("time")}>
                 <DropdownToggle caret>
                   {this.getName(this.state.currentTime)}
@@ -217,7 +217,7 @@ class App extends Component {
                   <DropdownItem onClick={() => this.setTime("this_week")}>This week</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-              <InputGroupAddon addonType="prepend" style={{marginLeft: "20px"}}>Data: </InputGroupAddon>
+              <InputGroupAddon addonType="prepend">Data: </InputGroupAddon>
               <Dropdown isOpen={this.state.dataDropdownOpen} toggle={() => this.toggle("data")}>
                 <DropdownToggle caret>
                   {this.getName(this.state.currentData)}
@@ -228,7 +228,7 @@ class App extends Component {
                   <DropdownItem onClick={() => this.setData("proposals")}>Proposals</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-              <InputGroupAddon addonType="prepend" style={{marginLeft: "20px"}}>Sort By: </InputGroupAddon>
+              <InputGroupAddon addonType="prepend">Sort By: </InputGroupAddon>
               <Dropdown isOpen={this.state.sortDropdownOpen} toggle={() => this.toggle("sort")}>
                 <DropdownToggle caret>
                   {this.getName(this.state.currentSort)}
@@ -252,7 +252,7 @@ class App extends Component {
               return( 
                 <Row>
                   <Col md="12">
-                    <Leaderboard 
+                    <Leaderboard
                       debates={(this.state.currentData === "both" || this.state.currentData === "debates") ? data.debates.edges : []}
                       proposals={(this.state.currentData === "both" || this.state.currentData === "proposals") ? data.proposals.edges : []} 
                       comments = {comments.comments.edges}
