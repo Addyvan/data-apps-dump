@@ -5,7 +5,7 @@ import './css/App.css';
 import './css/connext.scss';
 import gql from "graphql-tag";
 
-import Table from "./components/Table"
+import Table from "./components/Leaderboard"
 
 import {
   Container,
@@ -46,7 +46,7 @@ class App extends Component {
               <Container className="App" fluid>
                 <Row>
                   <Col md="6">
-                    <Table data={data}></Table>;
+                    <Table data={data.debates.edges}></Table>;
                   </Col>
                 </Row>
               </Container>
