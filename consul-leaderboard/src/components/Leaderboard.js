@@ -21,6 +21,16 @@ class Leaderboard extends React.Component {
 
   munge() {
     var users = {};
+    var empty_user = {
+      "Debates": 0,
+      "Proposals": 0,
+      "Comments": 0,
+      "upvotes_Comments": 0,
+      "downvotes_Comments":0,
+      "upvotes_Debates": 0,
+      "downvotes_Debates": 0,
+      "upvotes_Proposals": 0
+    };
   
     //munging for debates
     this.props.debates.map((edge) => { 
@@ -28,31 +38,15 @@ class Leaderboard extends React.Component {
       var user = node.public_author.username;
       var num_debate_upvotes = node.cached_votes_up;
       var num_debate_downvotes = node.cached_votes_down;
-      if (!(user in users)) {
-        users[user] = {
-          "Debates": 0,
-          "Proposals": 0,
-          "Comments": 0,
-          "upvotes_Comments": 0,
-          "downvotes_Comments":0,
-          "upvotes_Debates": 0,
-          "downvotes_Debates": 0,
-          "upvotes_Proposals": 0
-        };
-      }
-      if (this.props.sort_filter === "activity") {
-        users[user].Debates += 1;
-        users[user].upvotes_Debates += num_debate_upvotes;
-        users[user].downvotes_Debates += num_debate_downvotes;
-        return true;
-      }
-      if (this.props.sort_filter === "most_beloved") {
-        return true;
-      }
-      if (this.props.sort_filter === "most_controversial") {
-        return true;
-      }
-      return false;
+
+      if (!(user in users)) users[user] = empty_user; // If there is no data for this user yet
+      
+
+      users[user].Debates += 1;
+      users[user].upvotes_Debates += num_debate_upvotes;
+      users[user].downvotes_Debates += num_debate_downvotes;
+
+      return true;
     });
     //munging for Comments
     this.props.comments.map((edge) => {
@@ -60,66 +54,31 @@ class Leaderboard extends React.Component {
       var user = node.public_author.username;
       var num_comment_upvotes = node.cached_votes_up;
       var num_comment_downvotes = node.cached_votes_down;
-      if (!(user in users)) {
-        users[user] = {
-          "Debates": 0,
-          "Proposals": 0,
-          "Comments": 0,
-          "upvotes_Comments": 0,
-          "downvotes_Comments":0,
-          "upvotes_Debates": 0,
-          "downvotes_Debates": 0,
-          "upvotes_Proposals": 0
-        };
-      }
-      if (this.props.sort_filter === "activity") {
-        users[user].Comments += 1;
-        users[user].upvotes_Comments += num_comment_upvotes;
-        users[user].downvotes_Comments += num_comment_downvotes;
-        return true;
-      }
-      if (this.props.sort_filter === "most_beloved") {
-        return true;
-      }
-      if (this.props.sort_filter === "most_controversial") {
-        return true;
-      }
-      return false;
+
+      if (!(user in users)) users[user] = empty_user; // If there is no data for this user yet
+      
+      users[user].Comments += 1;
+      users[user].upvotes_Comments += num_comment_upvotes;
+      users[user].downvotes_Comments += num_comment_downvotes;
+
+      return true;
     });
     //munging for Proposals
     this.props.proposals.map((edge) => {
       var node = edge.node;
       var user = node.public_author.username;
       var num_proposal_upvotes = node.cached_votes_up;
-      if (!(user in users)) {
-        users[user] = {
-          "Debates": 0,
-          "Proposals": 0,
-          "Comments": 0,
-          "upvotes_Comments": 0,
-          "downvotes_Comments":0,
-          "upvotes_Debates": 0,
-          "downvotes_Debates": 0,
-          "upvotes_Proposals": 0
-        };
-      }
-      if (this.props.sort_filter === "activity") {
-        users[user].Proposals += 1;
-        users[user].upvotes_Proposals += num_proposal_upvotes;
-        return true;
-      }
-      if (this.props.sort_filter === "most_beloved") {
-        return true;
-      }
-      if (this.props.sort_filter === "most_controversial") {
-        return true;
-      }
-      return false;
 
+      if (!(user in users)) users[user] = empty_user; // If there is no data for this user yet
+      
+      
+      users[user].Proposals += 1;
+      users[user].upvotes_Proposals += num_proposal_upvotes;
+
+      return true;
     });
     
-
-    return(users);    
+    return(users); 
   }
 
   createTable(users) {
@@ -160,7 +119,7 @@ class Leaderboard extends React.Component {
 
   render() {
     var users = this.munge();
-    console.log(users);
+    
     var data = this.createTable(users);
 
     return(
