@@ -74,7 +74,7 @@ const QUERY_DATA_PROPOSALS = gql`
 `
 
 const QUERY_BOTH = gql`
-{
+{  
   proposals: 
     proposals {
       edges{
@@ -106,32 +106,70 @@ const QUERY_BOTH = gql`
     }
 }
 `
+const QUERY_COMMENTS = gql`
+{ 
+  comments{
+    edges{
+      node{
+        public_author{
+          username
+        }
+        commentable_type
+        cached_votes_up
+        cached_votes_down
+      }
+    }
+  }
+}
+`
 
 class App extends Component {
-  render() {
+  render () {
     return (
       <Query query={QUERY_BOTH}>
-        {
-        ({ loading, error, data }) => {
-          if (loading) return (<div className="lds-ripple"><div></div><div></div></div>);
-          if (error) return `Error!: ${error}`;
-          if (data !== {}) {
-
-            return (
+      {({ loading: loadingOne, error: errorOne, data: both }) => (
+        <Query query={QUERY_COMMENTS}>
+          {({ loading: loadingTwo, error: errorTwo, data: comments}) => {
+            if (loadingOne || loadingTwo) return (<div className="lds-ripple"><div></div><div></div></div>);
+            if (errorOne || errorTwo) return `Error!: ${errorOne}`;
+            return( 
               <Container className="App" fluid>
-                <Row>
-                  <Col md="12">
-                    <Leaderboard debates={data.debates.edges} proposals={data.proposals.edges}></Leaderboard>;
-                  </Col>
-                </Row>
+                  <Row>
+                    <Col md="12">
+                      <Leaderboard debates={both.debates.edges} proposals={both.proposals.edges} comments = {comments.comments.edges}></Leaderboard>;
+                    </Col>
+                  </Row>
               </Container>
-            );
-          }
-        }
-      }
+            )
+          }}
+        </Query>
+      )}
     </Query>
-    );
+    )
   }
+  // render() {
+  //   return (
+  //     <Query query={QUERY_BOTH}>
+  //       {
+  //       ({ loading, error, data, comments }) => {
+  //         if (loading) return (<div className="lds-ripple"><div></div><div></div></div>);
+  //         if (error) return `Error!: ${error}`;
+  //         if (data !== {}) {          
+  //           return (
+  //             <Container className="App" fluid>
+  //               <Row>
+  //                 <Col md="12">
+  //                   <Leaderboard debates={data.debates.edges} proposals={data.proposals.edges}></Leaderboard>;
+  //                 </Col>
+  //               </Row>
+  //             </Container>
+  //           );
+  //         }
+  //       }
+  //     }
+  //   </Query>
+  //   );
+  // }
 }
 
 export default App;
