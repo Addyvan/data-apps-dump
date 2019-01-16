@@ -206,7 +206,7 @@ class App extends Component {
       <Container fluid>
         <Row>
           <Col md="8"></Col>
-          <Col md="4">
+          <Col md="8">
             <Row>
               <InputGroupAddon addonType="prepend">When: </InputGroupAddon>
               <Dropdown isOpen={this.state.timeDropdownOpen} toggle={() => this.toggle("time")}>
