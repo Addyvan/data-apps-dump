@@ -131,9 +131,10 @@ class App extends Component {
         <Query query={QUERY_COMMENTS}>
           {({ loading: loadingTwo, error: errorTwo, data: comments}) => {
             if (loadingOne || loadingTwo) return (<div className="lds-ripple"><div></div><div></div></div>);
-            if (errorOne || errorTwo) return `Error!: ${errorOne}`;
+            if (errorOne) return `Error!: ${errorOne}`;
+            if (errorTwo) return `Error!: ${errorTwo}`;
             return( 
-              <Container className="App" fluid>
+              <Container fluid>
                   <Row>
                     <Col md="12">
                       <Leaderboard debates={both.debates.edges} proposals={both.proposals.edges} comments = {comments.comments.edges}></Leaderboard>;
@@ -147,29 +148,6 @@ class App extends Component {
     </Query>
     )
   }
-  // render() {
-  //   return (
-  //     <Query query={QUERY_BOTH}>
-  //       {
-  //       ({ loading, error, data, comments }) => {
-  //         if (loading) return (<div className="lds-ripple"><div></div><div></div></div>);
-  //         if (error) return `Error!: ${error}`;
-  //         if (data !== {}) {          
-  //           return (
-  //             <Container className="App" fluid>
-  //               <Row>
-  //                 <Col md="12">
-  //                   <Leaderboard debates={data.debates.edges} proposals={data.proposals.edges}></Leaderboard>;
-  //                 </Col>
-  //               </Row>
-  //             </Container>
-  //           );
-  //         }
-  //       }
-  //     }
-  //   </Query>
-  //   );
-  // }
 }
 
 export default App;
