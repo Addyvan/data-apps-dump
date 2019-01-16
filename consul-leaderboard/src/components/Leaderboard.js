@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
 import sizeMe from "react-sizeme";
-import { parse } from "querystring";
 
 /**
  * A Leaderboard component to show stats for GCconsultation
@@ -16,13 +15,28 @@ class Leaderboard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.createTable = this.createTable.bind(this);
+    
     this.munge = this.munge.bind(this);
+    this.popularity_score = this.popularity_score.bind(this);
+    this.controversial_score = this.controversial_score.bind(this);
+    this.activity_score = this.activity_score.bind(this);
+    this.sortData = this.sortData.bind(this);
+    this.createTable = this.createTable.bind(this);
   }
 
   munge() {
-    console.log(this.props)
     var users = {};
+    var empty_user = () => ({
+      "Debates": 0,
+      "Proposals": 0,
+      "Comments": 0,
+      "upvotes_Comments": 0,
+      "downvotes_Comments":0,
+      "upvotes_Debates": 0,
+      "downvotes_Debates": 0,
+      "upvotes_Proposals": 0
+    });
+  
     //munging for debates
     this.props.debates.map((edge) => { 
       var node = edge.node;
@@ -30,70 +44,41 @@ class Leaderboard extends React.Component {
       var num_debate_upvotes = node.cached_votes_up;
       var num_debate_downvotes = node.cached_votes_down;
       var debate_created_at = node.public_created_at;
-      if (!(user in users)) {
-        users[user] = {
-          "Debates": 0,
-          "Proposals": 0,
-          "Comments": 0,
-          "upvotes_Comments": 0,
-          "downvotes_Comments":0,
-          "upvotes_Debates": 0,
-          "downvotes_Debates": 0,
-          "upvotes_Proposals": 0
-        };
-      }
-      if (this.props.sort_filter === "activity") {
-        if (this.props.time_filter === 'this_week'){
-          function parseDate () {
-            return new Date(debate_created_at.slice(0,4), debate_created_at.slice(5,7)-1, debate_created_at.slice(8,10));
-          } 
-          function datediff(first, second) {
-            // Take the difference between the dates and divide by milliseconds per day.
-            // Round to nearest whole number to deal with DST.
-            return Math.round((second-first)/(1000*60*60*24));
-          }
-          var today = new Date();
-          if (datediff(parseDate (), today) > -1 && datediff(parseDate(), today) < 8){
-            users[user].Debates += 1;
-            users[user].upvotes_Debates += num_debate_upvotes;
-            users[user].downvotes_Debates += num_debate_downvotes;
-          }
+
+      if (!(user in users)) users[user] = empty_user(); // If there is no data for this user yet
+      
+      if (this.props.time_filter === 'this_week'){
+        function parseDate () {
+          return new Date(debate_created_at.slice(0,4), debate_created_at.slice(5,7)-1, debate_created_at.slice(8,10));
+        } 
+        function datediff(first, second) {
+          // Take the difference between the dates and divide by milliseconds per day.
+          // Round to nearest whole number to deal with DST.
+          return Math.round((second-first)/(1000*60*60*24));
         }
-        if (this.props.time_filter === 'all_time'){
+        var today = new Date();
+        if (datediff(parseDate (), today) > -1 && datediff(parseDate(), today) < 8){
           users[user].Debates += 1;
           users[user].upvotes_Debates += num_debate_upvotes;
           users[user].downvotes_Debates += num_debate_downvotes;
         }
-        return true;
       }
-      if (this.props.sort_filter === "most_beloved") {
-        return true;
+      if (this.props.time_filter === 'all_time'){
+        users[user].Debates += 1;
+        users[user].upvotes_Debates += num_debate_upvotes;
+        users[user].downvotes_Debates += num_debate_downvotes;
       }
-      if (this.props.sort_filter === "most_controversial") {
-        return true;
-      }
-      return false;
+      return true;
     });
     //munging for Comments
     this.props.comments.map((edge) => {
       var node = edge.node;
       var user = node.public_author.username;
-      var num_comment_upvotes = node.cached_votes_up;
-      var num_comment_downvotes = node.cached_votes_down;
       var comment_created_at = node.public_created_at;
-      if (!(user in users)) {
-        users[user] = {
-          "Debates": 0,
-          "Proposals": 0,
-          "Comments": 0,
-          "upvotes_Comments": 0,
-          "downvotes_Comments":0,
-          "upvotes_Debates": 0,
-          "downvotes_Debates": 0,
-          "upvotes_Proposals": 0
-        };
-      }
-      if (this.props.sort_filter === "activity") {
+
+      if (!(user in users)) users[user] = empty_user(); // If there is no data for this user yet
+
+      if ( this.props.data_filter === "both" || (this.props.data_filter === "debates" && node.commentable_type === "Debate") || (this.props.data_filter === "proposals" && node.commentable_type === "Proposal")) {
         if (this.props.time_filter === 'this_week'){
           function parseDate () {
             return new Date(comment_created_at.slice(0,4), comment_created_at.slice(5,7)-1, comment_created_at.slice(8,10));
@@ -106,24 +91,18 @@ class Leaderboard extends React.Component {
           var today = new Date();
           if (datediff(parseDate (), today) > -1 && datediff(parseDate(), today) < 8){
             users[user].Comments += 1;
-            users[user].upvotes_Comments += num_comment_upvotes;
-            users[user].downvotes_Comments += num_comment_downvotes;
+            users[user].upvotes_Comments += node.cached_votes_up;
+            users[user].downvotes_Comments += node.cached_votes_down;
           }
         }
         if (this.props.time_filter === 'all_time'){
           users[user].Comments += 1;
-          users[user].upvotes_Comments += num_comment_upvotes;
-          users[user].downvotes_Comments += num_comment_downvotes;
+          users[user].upvotes_Comments += node.cached_votes_up;
+          users[user].downvotes_Comments += node.cached_votes_down;
         }
-        return true;
       }
-      if (this.props.sort_filter === "most_beloved") {
-        return true;
-      }
-      if (this.props.sort_filter === "most_controversial") {
-        return true;
-      }
-      return false;
+
+      return true;
     });
     //munging for Proposals
     this.props.proposals.map((edge) => {
@@ -131,58 +110,105 @@ class Leaderboard extends React.Component {
       var user = node.public_author.username;
       var num_proposal_upvotes = node.cached_votes_up;
       var proposal_created_at = node.public_created_at;
-      if (!(user in users)) {
-        users[user] = {
-          "Debates": 0,
-          "Proposals": 0,
-          "Comments": 0,
-          "upvotes_Comments": 0,
-          "downvotes_Comments":0,
-          "upvotes_Debates": 0,
-          "downvotes_Debates": 0,
-          "upvotes_Proposals": 0
-        };
-      }
-      if (this.props.sort_filter === "activity") {
-        if (this.props.time_filter === 'this_week'){
-          function parseDate () {
-            return new Date(proposal_created_at.slice(0,4), proposal_created_at.slice(5,7)-1, proposal_created_at.slice(8,10));
-          } 
-          function datediff(first, second) {
-            // Take the difference between the dates and divide by milliseconds per day.
-            // Round to nearest whole number to deal with DST.
-            return Math.round((second-first)/(1000*60*60*24));
-          }
-          var today = new Date();
-          if (datediff(parseDate (), today) > -1 && datediff(parseDate(), today) < 8){
-            users[user].Proposals += 1;
-            users[user].upvotes_Proposals += num_proposal_upvotes;
-          }
+
+      if (!(user in users)) users[user] = empty_user(); // If there is no data for this user yet
+      
+      if (this.props.time_filter === 'this_week'){
+        function parseDate () {
+          return new Date(proposal_created_at.slice(0,4), proposal_created_at.slice(5,7)-1, proposal_created_at.slice(8,10));
+        } 
+        function datediff(first, second) {
+          // Take the difference between the dates and divide by milliseconds per day.
+          // Round to nearest whole number to deal with DST.
+          return Math.round((second-first)/(1000*60*60*24));
         }
-        if (this.props.time_filter === 'all_time'){
+        var today = new Date();
+        if (datediff(parseDate (), today) > -1 && datediff(parseDate(), today) < 8){
           users[user].Proposals += 1;
           users[user].upvotes_Proposals += num_proposal_upvotes;
         }
-        return true;
       }
-      if (this.props.sort_filter === "most_beloved") {
-        return true;
+      if (this.props.time_filter === 'all_time'){
+        users[user].Proposals += 1;
+        users[user].upvotes_Proposals += num_proposal_upvotes;
       }
-      if (this.props.sort_filter === "most_controversial") {
-        return true;
-      }
-      return false;
 
+      return true;
     });
     
+    var users_array = [];
 
-    return(users);    
+    for (var key in users) {
+      var temp = users[key];
+      temp["username"] = key;
+      users_array.push(temp);
+    }
+
+    return(users_array); 
   }
 
-  createTable(users) {
+  popularity_score(user) {
+    var total_upvotes = user["upvotes_Comments"] + user["upvotes_Debates"] + user["upvotes_Proposals"];
+    var total_downvotes = user["downvotes_Comments"] + user["downvotes_Debates"];
+    user["score"] = total_upvotes - total_downvotes;
+    return(user);
+  }
 
+  controversial_score(user) {
+    var total_upvotes = user["upvotes_Comments"] + user["upvotes_Debates"] + user["upvotes_Proposals"];
+    var total_downvotes = user["downvotes_Comments"] + user["downvotes_Debates"];
+    user["score"] = (total_upvotes + total_downvotes)/(total_upvotes/total_downvotes);
+    return(user);
+  }
+
+  activity_score(user) {
+    user["score"] = (user["Debates"] + user["Proposals"])*2 + user["Comments"];
+    return(user);
+  }
+
+  sortData(users_array) {
+
+    var score_fn;
+
+    switch(this.props.sort_filter) {
+      case "activity": score_fn = this.activity_score; break;
+      case "most_beloved": score_fn = this.popularity_score; break;
+      case "most_controversial": score_fn = this.controversial_score; break;
+      default: break;
+    }
+
+    users_array.map((user, index) => {
+      users_array[index] = score_fn(user);
+    });
+
+    var compare = (user_a, user_b) => {
+
+      if (user_a["score"] >= user_b["score"]) return -1;
+      else return 1;
+
+    }
+
+    users_array = users_array.sort(compare);
+
+    return(users_array);
+
+  }
+
+  createTable(users_array) {
+
+    users_array = this.sortData(users_array);
+
+    var values = [[],[]];
+
+    users_array.map((user) => {
+      values[0].push(user.username);
+      values[1].push(user.score);
+      return true;
+    });
+
+
+    /*
     var values = [[],[],[],[],[],[],[],[],[]]
-
     for (var key in users) {
       values[0].push(key);
       values[1].push(users[key]["Debates"]);
@@ -194,11 +220,11 @@ class Leaderboard extends React.Component {
       values[7].push(users[key]["downvotes_Debates"]);
       values[8].push(users[key]["upvotes_Proposals"]);
     }
-
+  */
     var data = [{
       type: 'table',
       header: {
-        values: [["Username"],["Debates"], ["Proposals"],["Comments"], ["Upvotes Recieved on Comments"], ["Downvotes Recieved on Comments"], ["Upvotes Recieved on Debates"], ["Downvotes Recieved on Debates"], ["Upvotes Recieved on Proposals"]],
+        values: [["Username"],[this.props.sort_filter]],
         align: "center",
         line: {width: 1, color: 'black'},
         fill: {color: "008B8B"},
@@ -216,9 +242,9 @@ class Leaderboard extends React.Component {
   }
 
   render() {
-    var users = this.munge();
-    console.log(users);
-    var data = this.createTable(users);
+    var users_array = this.munge();
+    
+    var data = this.createTable(users_array);
 
     return(
       <Plot
@@ -240,13 +266,13 @@ Leaderboard.propTypes = {
   Debates: PropTypes.array,
   Proposals: PropTypes.array,
   sort_filter: PropTypes.string,
-  contents_filter: PropTypes.string,
+  data_filter: PropTypes.string,
   time_filter: PropTypes.string
 };
 
 Leaderboard.defaultProps = {
   sort_filter: "activity",
-  contents_filter: "both",
+  data_filter: "both",
   time_filter: "all_time"
 };
 

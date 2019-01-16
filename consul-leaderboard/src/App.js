@@ -258,7 +258,7 @@ class App extends Component {
                       proposals={(this.state.currentData === "both" || this.state.currentData === "proposals") ? data.proposals.edges : []} 
                       comments = {comments.comments.edges}
                       sort_filter= {this.state.currentSort}
-                      contents_filter= {this.state.currentData}
+                      data_filter= {this.state.currentData}
                       time_filter= {this.state.currentTime}
                     />
                   </Col>
