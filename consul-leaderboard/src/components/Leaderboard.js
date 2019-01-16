@@ -24,8 +24,8 @@ class Leaderboard extends React.Component {
     var users = {};
     if (this.props.contents_filter === "both" || this.props.contents_filter === "debates") {
       this.props.debates.map((edge) => {
-        console.log(edge);
-        var user = edge.node.public_author.username;
+        var node = edge.node;
+        var user = node.public_author.username;
         if (!(user in users)) {
           users[user] = {
             "debates": 0,
@@ -39,7 +39,7 @@ class Leaderboard extends React.Component {
           };
         }
         if (this.props.sort_filter === "activity") {
-
+          users[user].debates += 1;
           return true;
         }
         if (this.props.sort_filter === "most_beloved") {
@@ -53,8 +53,8 @@ class Leaderboard extends React.Component {
     }
     if (this.props.contents_filter === "both" || this.props.contents_filter === "proposals") {
       this.props.proposals.map((edge) => {
-        console.log(edge);
-        var user = edge.node.public_author.username;
+        var node = edge.node;
+        var user = node.public_author.username;
         if (!(user in users)) {
           users[user] = {
             "debates": 0,
@@ -68,7 +68,7 @@ class Leaderboard extends React.Component {
           };
         }
         if (this.props.sort_filter === "activity") {
-
+          users[user].proposals += 1;
           return true;
         }
         if (this.props.sort_filter === "most_beloved") {
@@ -81,22 +81,31 @@ class Leaderboard extends React.Component {
         return true;
       });
     }
+
+    return(users);
     
   }
 
-  createTable() {
-    var values = [
-      ['Salaries', 'Office', 'Merchandise', 'Legal', 'TOTAL'],
-      [1200000, 20000, 80000, 2000, 12120000],
-      [1300000, 20000, 70000, 2000, 130902000],
-      [1300000, 20000, 120000, 2000, 131222000],
-      [1400000, 20000, 90000, 2000, 14102000]]
+  createTable(users) {
+
+    var values = [[],[],[],[],[],[],[],[],[]]
+
+    for (var key in users) {
+      values[0].push(key);
+      values[1].push(users[key]["debates"]);
+      values[2].push(users[key]["proposals"]);
+      values[3].push(users[key]["comments"]);
+      values[4].push(users[key]["upvotes_comments"]);
+      values[5].push(users[key]["downvotes_comments"]);
+      values[6].push(users[key]["upvotes_debates"]);
+      values[7].push(users[key]["downvotes_debates"]);
+      values[8].push(users[key]["upvotes_proposals"]);
+    }
 
     var data = [{
       type: 'table',
       header: {
-        values: [["EXPENSES"], ["Q1"],
-            ["Q2"], ["Q3"], ["Q4"]],
+        values: [["username"],["debates"], ["proposals"],["comments"], ["upvotes_comments"], ["downvotes_comments"], ["upvotes_debates"], ["downvotes_debates"], ["upvotes_proposals"]],
         align: "center",
         line: {width: 1, color: 'black'},
         fill: {color: "grey"},
@@ -114,9 +123,9 @@ class Leaderboard extends React.Component {
   }
 
   render() {
-    this.munge();
+    var users = this.munge();
     
-    var data = this.createTable()
+    var data = this.createTable(users);
 
     return(
       <Plot

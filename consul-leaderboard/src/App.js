@@ -120,7 +120,7 @@ class App extends Component {
             return (
               <Container className="App" fluid>
                 <Row>
-                  <Col md="6">
+                  <Col md="12">
                     <Leaderboard debates={data.debates.edges} proposals={data.proposals.edges}></Leaderboard>;
                   </Col>
                 </Row>
