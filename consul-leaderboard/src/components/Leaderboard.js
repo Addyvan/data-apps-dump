@@ -27,6 +27,8 @@ class Leaderboard extends React.Component {
       this.props.debates.map((edge) => { 
         var node = edge.node;
         var user = node.public_author.username;
+        var num_debate_upvotes = node.cached_votes_up;
+        var num_debate_downvotes = node.cached_votes_down;
         if (!(user in users)) {
           users[user] = {
             "Debates": 0,
@@ -41,6 +43,8 @@ class Leaderboard extends React.Component {
         }
         if (this.props.sort_filter === "activity") {
           users[user].Debates += 1;
+          users[user].upvotes_Debates += num_debate_upvotes;
+          users[user].downvotes_Debates += num_debate_downvotes;
           return true;
         }
         if (this.props.sort_filter === "most_beloved") {
@@ -55,6 +59,8 @@ class Leaderboard extends React.Component {
       this.props.comments.map((edge) => {
         var node = edge.node;
         var user = node.public_author.username;
+        var num_comment_upvotes = node.cached_votes_up;
+        var num_comment_downvotes = node.cached_votes_down;
         if (!(user in users)) {
           users[user] = {
             "Debates": 0,
@@ -69,6 +75,8 @@ class Leaderboard extends React.Component {
         }
         if (this.props.sort_filter === "activity") {
           users[user].Comments += 1;
+          users[user].upvotes_Comments += num_comment_upvotes;
+          users[user].downvotes_Comments += num_comment_downvotes;
           return true;
         }
         if (this.props.sort_filter === "most_beloved") {
@@ -84,6 +92,7 @@ class Leaderboard extends React.Component {
       this.props.proposals.map((edge) => {
         var node = edge.node;
         var user = node.public_author.username;
+        var num_proposal_upvotes = node.cached_votes_up;
         if (!(user in users)) {
           users[user] = {
             "Debates": 0,
@@ -98,6 +107,7 @@ class Leaderboard extends React.Component {
         }
         if (this.props.sort_filter === "activity") {
           users[user].Proposals += 1;
+          users[user].upvotes_Proposals += num_proposal_upvotes;
           return true;
         }
         if (this.props.sort_filter === "most_beloved") {
