@@ -5,6 +5,8 @@ import './css/App.css';
 import './css/connext.scss';
 import gql from "graphql-tag";
 
+import Table from "./components/Table"
+
 import {
   Container,
   Row,
@@ -44,12 +46,7 @@ class App extends Component {
               <Container className="App" fluid>
                 <Row>
                   <Col md="6">
-                    {
-                      data.debates.edges.map((node) => {
-                        console.log(node);
-                        return(<div>{node.node["public_author"]["username"]}</div>)
-                      })
-                    }
+                    <Table data={data}></Table>;
                   </Col>
                 </Row>
               </Container>

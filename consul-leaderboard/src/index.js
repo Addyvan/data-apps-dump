@@ -21,7 +21,6 @@ const authLink = setContext((_, { headers }) => {
 
   return {
     headers: {
-      "origin": "https://consul.beta.gccollab.ca/",
       "Content-Type": "application/json",
       "X-CSRF-Token": "emvNBM+jupuHD+QjZpMHZ81YQ2gSEaNEgIW+8gzPhctL9ap/CIz4ZSzMb/RYyTuHBdxx9IADWvwyM1AepMeieg=="
     }
