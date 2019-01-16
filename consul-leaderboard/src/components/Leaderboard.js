@@ -196,6 +196,20 @@ class Leaderboard extends React.Component {
 
   createTable(users_array) {
 
+    function getName(key) {
+      var legend = {
+        "all_time": "All time",
+        "this_week": "This week",
+        "debates": "Debates",
+        "proposals": "Proposals",
+        "both": "All",
+        "activity": "Activity",
+        "most_beloved": "Most Popular",
+        "most_controversial": "Most Controversial"
+      };
+      return(legend[key]);
+    }
+
     users_array = this.sortData(users_array);
 
     var values = [[],[]];
@@ -224,7 +238,7 @@ class Leaderboard extends React.Component {
     var data = [{
       type: 'table',
       header: {
-        values: [["Username"],[this.props.sort_filter]],
+        values: [["Username"],[getName(this.props.sort_filter)]],
         align: "center",
         line: {width: 1, color: 'black'},
         fill: {color: "008B8B"},
