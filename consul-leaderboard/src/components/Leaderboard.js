@@ -23,9 +23,9 @@ class Leaderboard extends React.Component {
     console.log(this.props);
     var users = {};
     if (this.props.contents_filter === "both" || this.props.contents_filter === "debates") {
-      this.props.debates.map((node) => {
-        console.log(node);
-        var user = node.public_author.username;
+      this.props.debates.map((edge) => {
+        console.log(edge);
+        var user = edge.node.public_author.username;
         if (!(user in users)) {
           users[user] = {
             "debates": 0,
@@ -52,9 +52,9 @@ class Leaderboard extends React.Component {
       });
     }
     if (this.props.contents_filter === "both" || this.props.contents_filter === "proposals") {
-      this.props.proposals.map((node) => {
-        console.log(node);
-        var user = node.public_author.username;
+      this.props.proposals.map((edge) => {
+        console.log(edge);
+        var user = edge.node.public_author.username;
         if (!(user in users)) {
           users[user] = {
             "debates": 0,
@@ -134,8 +134,8 @@ class Leaderboard extends React.Component {
 }
 
 Leaderboard.propTypes = {
-  debates: PropTypes.object,
-  proposals: PropTypes.object,
+  debates: PropTypes.array,
+  proposals: PropTypes.array,
   sort_filter: PropTypes.string,
   contents_filter: PropTypes.string,
   time_filter: PropTypes.string
