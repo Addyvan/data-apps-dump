@@ -157,7 +157,9 @@ class Leaderboard extends React.Component {
   controversial_score(user) {
     var total_upvotes = user["upvotes_Comments"] + user["upvotes_Debates"] + user["upvotes_Proposals"];
     var total_downvotes = user["downvotes_Comments"] + user["downvotes_Debates"];
-    user["score"] = (total_upvotes + total_downvotes)/(total_upvotes/total_downvotes);
+    if (total_upvotes < 1) total_upvotes = 1;
+    if (total_downvotes < 1) total_downvotes = 1;
+    user["score"] = (total_upvotes + total_downvotes)/(total_upvotes / total_downvotes);
     return(user);
   }
 
@@ -203,32 +205,89 @@ class Leaderboard extends React.Component {
         "debates": "Debates",
         "proposals": "Proposals",
         "both": "All",
-        "activity": "Activity",
-        "most_beloved": "Most Popular",
-        "most_controversial": "Most Controversial"
+        "activity": "Activity Score",
+        "most_beloved": "Popularity Score",
+        "most_controversial": "Controversy Score"
       };
       return(legend[key]);
     }
 
     users_array = this.sortData(users_array);
 
-    var values = [[],[]];
-
     if (this.props.sort_filter === "activity") {
 
+      var values = [[],[],[],[]]; if (this.props.data_filter === "both") values.push([]); //ignore this spaghetti
+      var header_values = [["Username"],[getName(this.props.sort_filter)],["Comments"]];
+      if (this.props.data_filter === "both") {
+        header_values.push(["Debates"]);
+        header_values.push(["Proposals"]);
+      } else {
+        if (this.props.data_filter === "debates")
+          header_values.push(["Debates"]);
+        else
+          header_values.push(["Proposals"]);
+      }
+        
+      users_array.map((user) => {
+        values[0].push(user.username);
+        values[1].push(user.score);
+        if (this.props.data_filter === "both") {
+          values[2].push(user["Comments"]);
+          values[3].push(user["Debates"]);
+          values[4].push(user["Proposals"]);
+        } else {
+          values[2].push(user["Comments"]);
+          if (this.props.data_filter === "debates")
+            values[3].push(user["Debates"]);
+          else
+            values[3].push(user["Proposals"]);
+        }
+        
+        return true;
+      });
     }
-    if (this.props.sort_filter === "most_beloved") {
-      
-    } 
-    if (this.props.sort_filter === "most_controversial") {
-      
-    } 
 
-    users_array.map((user) => {
-      values[0].push(user.username);
-      values[1].push(user.score);
-      return true;
-    });
+    if (this.props.sort_filter === "most_beloved" || this.props.sort_filter === "most_controversial") {
+      var values = [[],[],[],[]];
+      var header_values = [["Username"],[getName(this.props.sort_filter)], ["Upvotes on Comments"],["Downvotes on Comments"]];
+
+      if (this.props.data_filter === "both") {
+        values.push([]);values.push([]);values.push([]);
+        header_values.push(["Upvotes on Debates"]);
+        header_values.push(["Downvotes on Debates"]);
+        header_values.push(["Upvotes on Proposals"]);
+      } else {
+        if (this.props.data_filter === "debates") {
+          values.push([]);values.push([]);
+          header_values.push(["Upvotes on Debates"]);
+          header_values.push(["Downvotes on Debates"]);
+        } else {
+            header_values.push(["Upvotes on Proposals"]);
+            values.push([]);
+          }
+      }
+
+      users_array.map((user) => {
+        values[0].push(user.username);
+        values[1].push(user.score);
+        values[2].push(user.upvotes_Comments);
+        values[3].push(user.downvotes_Comments);
+        if (this.props.data_filter === "both") {
+          values[4].push(user["upvotes_Debates"]);
+          values[5].push(user["downvotes_Debates"]);
+          values[6].push(user["upvotes_Proposals"]);
+        } else {
+          if (this.props.data_filter === "debates") {
+            values[4].push(user["upvotes_Debates"]);
+            values[5].push(user["downvotes_Debates"]);
+          }
+          else
+            values[4].push(user["upvotes_Proposals"]);
+          
+        }
+        return true;
+      });
+    } 
 
 
     /*
@@ -248,7 +307,7 @@ class Leaderboard extends React.Component {
     var data = [{
       type: 'table',
       header: {
-        values: [["Username"],[getName(this.props.sort_filter)]],
+        values: header_values,
         align: "center",
         line: {width: 1, color: 'black'},
         fill: {color: "008B8B"},
