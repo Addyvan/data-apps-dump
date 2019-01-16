@@ -289,21 +289,6 @@ class Leaderboard extends React.Component {
       });
     } 
 
-
-    /*
-    var values = [[],[],[],[],[],[],[],[],[]]
-    for (var key in users) {
-      values[0].push(key);
-      values[1].push(users[key]["Debates"]);
-      values[2].push(users[key]["Proposals"]);
-      values[3].push(users[key]["Comments"]);
-      values[4].push(users[key]["upvotes_Comments"]);
-      values[5].push(users[key]["downvotes_Comments"]);
-      values[6].push(users[key]["upvotes_Debates"]);
-      values[7].push(users[key]["downvotes_Debates"]);
-      values[8].push(users[key]["upvotes_Proposals"]);
-    }
-  */
     var data = [{
       type: 'table',
       header: {
@@ -311,13 +296,13 @@ class Leaderboard extends React.Component {
         align: "center",
         line: {width: 1, color: 'black'},
         fill: {color: "467B8D"},
-        font: {family: "Arial", size: 12, color: "white"}
+        font: {family: "Rubik, sans-serif", size: 12, color: "white"}
       },
       cells: {
         values: values,
         align: "center",
         line: {color: "black", width: 1},
-        font: {family: "Arial", size: 11, color: ["black"]}
+        font: {family: "Rubik, sans-serif", size: 11, color: ["black"]}
       }
     }]
 
@@ -337,6 +322,9 @@ class Leaderboard extends React.Component {
           autosize: false,
           width: this.props.size.width,
           height: "800",
+          font: {
+            family: "Rubik, sans-serif"
+          },
           title: 'GCconsultation Leaderboard'
         }}
         config={{displayModeBar: false}}
