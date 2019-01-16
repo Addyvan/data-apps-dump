@@ -310,7 +310,7 @@ class Leaderboard extends React.Component {
         values: header_values,
         align: "center",
         line: {width: 1, color: 'black'},
-        fill: {color: "008B8B"},
+        fill: {color: "467B8D"},
         font: {family: "Arial", size: 12, color: "white"}
       },
       cells: {
