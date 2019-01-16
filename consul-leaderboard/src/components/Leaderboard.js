@@ -21,7 +21,7 @@ class Leaderboard extends React.Component {
 
   munge() {
     var users = {};
-    var empty_user = {
+    var empty_user = () => ({
       "Debates": 0,
       "Proposals": 0,
       "Comments": 0,
@@ -30,7 +30,7 @@ class Leaderboard extends React.Component {
       "upvotes_Debates": 0,
       "downvotes_Debates": 0,
       "upvotes_Proposals": 0
-    };
+    });
   
     //munging for debates
     this.props.debates.map((edge) => { 
@@ -39,7 +39,7 @@ class Leaderboard extends React.Component {
       var num_debate_upvotes = node.cached_votes_up;
       var num_debate_downvotes = node.cached_votes_down;
 
-      if (!(user in users)) users[user] = empty_user; // If there is no data for this user yet
+      if (!(user in users)) users[user] = empty_user(); // If there is no data for this user yet
       
 
       users[user].Debates += 1;
@@ -52,14 +52,14 @@ class Leaderboard extends React.Component {
     this.props.comments.map((edge) => {
       var node = edge.node;
       var user = node.public_author.username;
-      var num_comment_upvotes = node.cached_votes_up;
-      var num_comment_downvotes = node.cached_votes_down;
 
-      if (!(user in users)) users[user] = empty_user; // If there is no data for this user yet
-      
-      users[user].Comments += 1;
-      users[user].upvotes_Comments += num_comment_upvotes;
-      users[user].downvotes_Comments += num_comment_downvotes;
+      if (!(user in users)) users[user] = empty_user(); // If there is no data for this user yet
+
+      if ( this.props.data_filter === "both" || (this.props.data_filter === "debates" && node.commentable_type === "Debate") || (this.props.data_filter === "proposals" && node.commentable_type === "Proposal")) {
+        users[user].Comments += 1;
+        users[user].upvotes_Comments += node.cached_votes_up;
+        users[user].downvotes_Comments += node.cached_votes_down;
+      }
 
       return true;
     });
@@ -69,7 +69,7 @@ class Leaderboard extends React.Component {
       var user = node.public_author.username;
       var num_proposal_upvotes = node.cached_votes_up;
 
-      if (!(user in users)) users[user] = empty_user; // If there is no data for this user yet
+      if (!(user in users)) users[user] = empty_user(); // If there is no data for this user yet
       
       
       users[user].Proposals += 1;
@@ -142,13 +142,13 @@ Leaderboard.propTypes = {
   Debates: PropTypes.array,
   Proposals: PropTypes.array,
   sort_filter: PropTypes.string,
-  contents_filter: PropTypes.string,
+  data_filter: PropTypes.string,
   time_filter: PropTypes.string
 };
 
 Leaderboard.defaultProps = {
   sort_filter: "activity",
-  contents_filter: "both",
+  data_filter: "both",
   time_filter: "all_time"
 };
 
