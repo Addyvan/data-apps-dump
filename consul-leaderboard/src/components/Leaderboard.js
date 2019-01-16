@@ -143,10 +143,10 @@ class Leaderboard extends React.Component {
     var data = [{
       type: 'table',
       header: {
-        values: [["username"],["Debates"], ["Proposals"],["Comments"], ["upvotes_Comments"], ["downvotes_Comments"], ["upvotes_Debates"], ["downvotes_Debates"], ["upvotes_Proposals"]],
+        values: [["Username"],["Debates"], ["Proposals"],["Comments"], ["Upvotes Recieved on Comments"], ["Downvotes Recieved on Comments"], ["Upvotes Recieved on Debates"], ["Downvotes Recieved on Debates"], ["Upvotes Recieved on Proposals"]],
         align: "center",
         line: {width: 1, color: 'black'},
-        fill: {color: "grey"},
+        fill: {color: "008B8B"},
         font: {family: "Arial", size: 12, color: "white"}
       },
       cells: {
@@ -167,6 +167,7 @@ class Leaderboard extends React.Component {
 
     return(
       <Plot
+        id = "table"
         data={data}
         layout={{
           autosize: false,
