@@ -116,6 +116,7 @@ const QUERY_COMMENTS = gql`
   comments {
     edges {
       node {
+        public_created_at
         public_author {
           username
         }
