@@ -9,6 +9,7 @@ import sizeMe from "react-sizeme";
  * @prop {object} proposals - An edge object returned from GraphQL
  * @prop {string} sort_filter - A string denoting how to create the leaderboard. Possible values: "activity", "most_beloved", "most_controversial" - default="activity"
  * @prop {string} contents_filter - A string denoting how to create the leaderboard. Possible values: "debates", "proposals", "both" - default="both"
+ * @prop {string} time_filter - A string denoting the timeframe covered by the leaderboard. Possible values: "this_week", "all_time" - default="all_time"
  */
 class Leaderboard extends React.Component {
 
@@ -18,17 +19,66 @@ class Leaderboard extends React.Component {
     this.munge = this.munge.bind(this);
   }
 
-
-
   munge() {
-    this.props.debates.map((node) => {
-      console.log(node);
-      return true;
-    });
-    this.props.proposals.map((node) => {
-      console.log(node);
-      return true;
-    });
+    var users = {};
+    if (this.props.contents_filter === "both" || this.props.contents_filter === "debates") {
+      this.props.debates.map((node) => {
+        var user = node.public_author.username;
+        if (!user in users) {
+          users[user] = {
+            "debates": 0,
+            "proposals": 0,
+            "comments": 0,
+            "upvotes_comments": 0,
+            "downvotes_comments":0,
+            "upvotes_debates": 0,
+            "downvotes_debates": 0,
+            "upvotes_proposals": 0
+          };
+        }
+        if (this.props.sort_filter === "activity") {
+
+          return true;
+        }
+        if (this.props.sort_filter === "most_beloved") {
+          return true;
+        }
+        if (this.props.sort_filter === "most_controversial") {
+          return true;
+        }
+        return false;
+      });
+    }
+    if (this.props.contents_filter === "both" || this.props.contents_filter === "proposals") {
+      this.props.proposals.map((node) => {
+        var user = node.public_author.username;
+        if (!user in users) {
+          users[user] = {
+            "debates": 0,
+            "proposals": 0,
+            "comments": 0,
+            "upvotes_comments": 0,
+            "downvotes_comments":0,
+            "upvotes_debates": 0,
+            "downvotes_debates": 0,
+            "upvotes_proposals": 0
+          };
+        }
+        if (this.props.sort_filter === "activity") {
+
+          return true;
+        }
+        if (this.props.sort_filter === "most_beloved") {
+          return true;
+        }
+        if (this.props.sort_filter === "most_controversial") {
+          return true;
+        }
+        return false;
+        return true;
+      });
+    }
+    
   }
 
   createTable() {
@@ -84,11 +134,14 @@ Leaderboard.propTypes = {
   debates: PropTypes.object,
   proposals: PropTypes.object,
   sort_filter: PropTypes.string,
-  contents_filter: PropTypes.string
+  contents_filter: PropTypes.string,
+  time_filter: PropTypes.string
 };
 
 Leaderboard.defaultProps = {
-  filter: "activity"
+  sort_filter: "activity",
+  contents_filter: "both",
+  time_filter: "all_time"
 };
 
 export default sizeMe()(Leaderboard);
