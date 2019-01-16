@@ -29,7 +29,64 @@ const QUERY_DATA = gql`
   	}
   }
 }
-
+`
+const QUERY_DATA_DEBATES = gql`
+{
+  debates{
+    edges {
+      node {
+        public_created_at
+        public_author {
+          username
+        }
+        comments_count
+        comments {
+          edges {
+            node {
+              public_author{
+                username
+              }
+              cached_votes_up
+              cached_votes_down
+              cached_votes_total
+            }
+          }
+        }
+        cached_votes_up
+        cached_votes_down
+        cached_votes_total
+      }
+    }
+  }
+}
+`
+const QUERY_DATA_PROPOSALS = gql`
+{
+  proposals {
+    edges{
+      node{
+        public_created_at
+        public_author{
+          username
+        }
+        comments_count
+        comments {
+          edges {
+            node{
+              public_author{
+                username
+              }
+              cached_votes_up
+              cached_votes_down
+              cached_votes_total
+            }
+          }
+        }
+        cached_votes_up
+      }
+    }
+  }
+}
 `
 
 class App extends Component {
