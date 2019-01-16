@@ -5,7 +5,7 @@ import './css/App.css';
 import './css/connext.scss';
 import gql from "graphql-tag";
 
-import Table from "./components/Leaderboard"
+import Leaderboard from "./components/Leaderboard"
 
 import {
   Container,
@@ -13,23 +13,7 @@ import {
   Col
 } from "reactstrap";
 
-const QUERY_DATA = gql`
-{
-  debates {
-   	edges {
-    	node {
-        public_created_at
-        cached_votes_down
-        cached_votes_up
-        public_author {
-          username
-        }
-        
-      }
-  	}
-  }
-}
-`
+
 const QUERY_DATA_DEBATES = gql`
 {
   debates{
@@ -89,10 +73,44 @@ const QUERY_DATA_PROPOSALS = gql`
 }
 `
 
+const QUERY_BOTH = gql`
+{
+  proposals: 
+    proposals {
+      edges{
+        node{
+          public_created_at
+          public_author{
+            username
+          }
+          comments_count
+          cached_votes_up
+        }
+      }
+    }
+	
+  debates: 
+    debates{
+      edges {
+        node {
+          public_created_at
+          public_author {
+            username
+          }
+          comments_count
+          cached_votes_up
+          cached_votes_down
+          cached_votes_total
+        }
+      }
+    }
+}
+`
+
 class App extends Component {
   render() {
     return (
-      <Query query={QUERY_DATA}>
+      <Query query={QUERY_BOTH}>
         {
         ({ loading, error, data }) => {
           if (loading) return (<div className="lds-ripple"><div></div><div></div></div>);
@@ -103,7 +121,7 @@ class App extends Component {
               <Container className="App" fluid>
                 <Row>
                   <Col md="6">
-                    <Table data={data.debates.edges}></Table>;
+                    <Leaderboard debates={data.debates.edges} proposals={data.proposals.edges}></Leaderboard>;
                   </Col>
                 </Row>
               </Container>

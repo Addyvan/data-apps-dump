@@ -20,11 +20,13 @@ class Leaderboard extends React.Component {
   }
 
   munge() {
+    console.log(this.props);
     var users = {};
     if (this.props.contents_filter === "both" || this.props.contents_filter === "debates") {
       this.props.debates.map((node) => {
+        console.log(node);
         var user = node.public_author.username;
-        if (!user in users) {
+        if (!(user in users)) {
           users[user] = {
             "debates": 0,
             "proposals": 0,
@@ -51,8 +53,9 @@ class Leaderboard extends React.Component {
     }
     if (this.props.contents_filter === "both" || this.props.contents_filter === "proposals") {
       this.props.proposals.map((node) => {
+        console.log(node);
         var user = node.public_author.username;
-        if (!user in users) {
+        if (!(user in users)) {
           users[user] = {
             "debates": 0,
             "proposals": 0,
