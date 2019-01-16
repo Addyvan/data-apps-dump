@@ -145,6 +145,16 @@ class Leaderboard extends React.Component {
 
     var values = [[],[]];
 
+    if (this.props.sort_filter === "activity") {
+
+    }
+    if (this.props.sort_filter === "most_beloved") {
+      
+    } 
+    if (this.props.sort_filter === "most_controversial") {
+      
+    } 
+
     users_array.map((user) => {
       values[0].push(user.username);
       values[1].push(user.score);
