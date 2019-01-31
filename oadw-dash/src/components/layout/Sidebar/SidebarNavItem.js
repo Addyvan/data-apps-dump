@@ -8,7 +8,7 @@ class SidebarNavItem extends React.Component {
     return(
       <NavItem>
         <NavLink className="sidebar-navlink" href={this.props.path} active={window.location.pathname === this.props.path}>
-          { (this.props.logo_path) ? <img style={{maxHeight: "20px"}} src={this.props.logo_path}/> : ""  } 
+          { (this.props.logo_path) ? <img style={{maxHeight: "20px"}} src={this.props.logo_path} alt={this.props.logo_path}/> : ""  } 
           {"   " + this.props.text}
         </NavLink>
       </NavItem>

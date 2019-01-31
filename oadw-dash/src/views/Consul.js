@@ -41,30 +41,6 @@ class Consul extends React.Component {
               className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => { this.toggle('2'); }}
             >
-              Discussions
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === '3' })}
-              onClick={() => { this.toggle('3'); }}
-            >
-              Proposals
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === '4' })}
-              onClick={() => { this.toggle('4'); }}
-            >
-              Voting
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === '5' })}
-              onClick={() => { this.toggle('5'); }}
-            >
               Consultations
             </NavLink>
           </NavItem>
@@ -78,27 +54,6 @@ class Consul extends React.Component {
               </Row>
             </TabPane>
             <TabPane tabId="2">
-              <Row>
-                <Col sm="12" md="12" lg="12" className="tab-content">
-                  <h4>Discussions</h4>
-                </Col>
-              </Row>
-            </TabPane>
-            <TabPane tabId="3">
-              <Row>
-                <Col sm="12" md="12" lg="12" className="tab-content">
-                  <h4>Proposals</h4>
-                </Col>
-              </Row>
-            </TabPane>
-            <TabPane tabId="4">
-              <Row>
-                <Col sm="12" md="12" lg="12" className="tab-content">
-                  <h4>Voting</h4>
-                </Col>
-              </Row>
-            </TabPane>
-            <TabPane tabId="5">
               <Row>
                 <Col sm="12" md="12" lg="12" className="tab-content">
                   <h4>Consultations</h4>
