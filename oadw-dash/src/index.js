@@ -9,10 +9,22 @@ import store from './redux/store'
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n/i18n'; // initialized i18next instance
 
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from "apollo-boost";
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000',
+  addTypename: false
+});
+
+console.log(client);
+
 ReactDOM.render(
   <Provider store={store}>
     <I18nextProvider i18n={ i18n }>
-      <App />
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
     </I18nextProvider>
   </Provider>,  
   document.getElementById('root')

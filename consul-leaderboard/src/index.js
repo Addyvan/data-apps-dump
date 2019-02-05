@@ -32,8 +32,6 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
 });
 
-console.log(client);
-
 ReactDOM.render(<ApolloProvider client={client}><App /></ApolloProvider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

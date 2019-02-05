@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "apollo-boost": "^0.1.23",
+    "apollo-link": "^1.2.6",
+    "apollo-link-context": "^1.0.12",
     "bootstrap": "^4.2.1",
+    "dash-core-components": "^0.43.0",
     "graphql": "^14.0.2",
     "i18next": "^14.0.1",
     "node-sass": "^4.10.0",

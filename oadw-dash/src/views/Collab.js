@@ -4,6 +4,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap
 import classnames from 'classnames';
 
 import CollabOverview from "./collab/overview";
+import CollabCareerMP from "./collab/careermp";
 
 class Collab extends React.Component {
 
@@ -33,6 +34,7 @@ class Collab extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
               onClick={() => { this.toggle('1'); }}
+              href="#"
             >
               Overview
             </NavLink>
@@ -41,8 +43,18 @@ class Collab extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => { this.toggle('2'); }}
+              href="#"
             >
-              Carreer Marketplace
+              Carreer Marketplace Overview
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '3' })}
+              onClick={() => { this.toggle('3'); }}
+              href="#"
+            >
+              Carreer Marketplace Explorer
             </NavLink>
           </NavItem>
         </Nav>
@@ -57,7 +69,14 @@ class Collab extends React.Component {
             <TabPane tabId="2">
               <Row>
                 <Col sm="12" md="12" lg="12" className="tab-content">
-                  <h4>Career MP</h4>
+                  Overview
+                </Col>
+              </Row>
+            </TabPane>
+            <TabPane tabId="3">
+              <Row>
+                <Col sm="12" md="12" lg="12" className="tab-content">
+                  <CollabCareerMP />
                 </Col>
               </Row>
             </TabPane>
