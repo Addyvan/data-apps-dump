@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import routes from "./routes";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./utils/oadw-dash.css";
+import "./utils/oadw-dash.scss";
 
 class App extends React.Component {
   render() {

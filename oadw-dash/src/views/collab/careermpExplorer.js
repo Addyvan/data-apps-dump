@@ -3,13 +3,14 @@ import React from "react";
 import QueryDropdown from "../../components/dash/QueryDropdown";
 
 import Skills from "../../components/gccollab/careermp/Skills";
+import Mission from "../../components/gccollab/careermp/Mission";
 
-import { Row, Col, Label, Card, CardBody } from "reactstrap";
+import { Row, Col, Label, Card, CardBody, CardColumns, Spinner } from "reactstrap";
 
 import {Query} from "react-apollo";
 import gql from "graphql-tag";
 
-class CollabCareerMP extends React.Component {
+class CollabCareerMPExplorer extends React.Component {
   
   constructor(props) {
     super(props);
@@ -35,6 +36,14 @@ class CollabCareerMP extends React.Component {
             ) {
               department
               keySkills
+              title
+              startDate
+              deadlineDate
+              completionDate
+              location
+              state
+              jobType
+              description
             }
           }
 
@@ -177,8 +186,8 @@ class CollabCareerMP extends React.Component {
                   var options = [];
                   data.enumMetaData.map((option) => {
                     options.push({
-                      title: option, 
-                      value: option, 
+                      title: option,
+                      value: option,
                       callback: this.setProgramArea
                     });
                     return true;
@@ -203,18 +212,40 @@ class CollabCareerMP extends React.Component {
         }} >
           {
             ({ loading, error, data }) => {
-              if (loading) return (<div className="lds-ripple" />);
+              if (loading) return (<Spinner color="primary" />);
               if (data) {
                 
                 return(
                   <Row>
-                    <Col md="4" lg="4" sm="6">
+                    <Col md="4" lg="4" sm="12">
                       <Card>
                         <CardBody>
                           <h4 className="text-center">Top 10 Skills</h4>
                           <Skills missions={data.missions} />
                         </CardBody>
                       </Card>
+                    </Col>
+                    <Col md="8" lg="8" sm="12">
+                      <CardColumns>
+                        {
+                          data.missions.splice(0,20).map((mission) => (
+                            
+                            <Mission 
+                              title={mission.title}
+                              startDate={mission.startDate}
+                              deadlineDate={mission.deadlineDate}
+                              completionDate={mission.completionDate}
+                              location={mission.location}
+                              department={mission.department}
+                              state={mission.state}
+                              jobType={mission.jobType}
+                              description={mission.description}
+                              keySkills={mission.keySkills}
+                            />
+                          
+                          ))
+                        }
+                      </CardColumns>
                     </Col>
                   </Row>
                 );
@@ -230,4 +261,4 @@ class CollabCareerMP extends React.Component {
   }
 }
 
-export default CollabCareerMP;
+export default CollabCareerMPExplorer;

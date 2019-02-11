@@ -8,6 +8,18 @@
   height: 100%;
 }
 
+#numUsers {
+  //background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
+  //color: white;
+  padding: 25px;
+}
+
+#numGroups {
+  //background: linear-gradient(to right, #b66681, #c8006b, #c80075, #b66681);
+  //color: white;
+  padding: 25px;
+}
+
 html, body {
   height: 100%;
 }
@@ -26,6 +38,7 @@ html, body {
 .content {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) inset;
   padding: 0px;
+  height: 100%;
 }
 
 .oadw-nav {
@@ -40,6 +53,11 @@ html, body {
 
 .tab-content {
   padding: 20px;
+}
+
+.mission-subtitle {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 body {

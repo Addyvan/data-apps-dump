@@ -11,7 +11,7 @@ class NavBar extends React.Component {
       <I18n ns={["translation"]}>
         {
           (t, { i18n }) => (
-            <Row style={{paddingBottom: "5px"}} className="oadw-nav">
+            <Row style={{paddingBottom: "5px", margin: "0px"}} className="oadw-nav">
               <Col lg="2" md="3" sm="12" className="logo" style={{padding: "0px"}}>
                 <h1 style={{margin: "0px"}}>{t("title")} <div style={{fontSize: "9px"}}>(technical demonstration)</div></h1>
               </Col>

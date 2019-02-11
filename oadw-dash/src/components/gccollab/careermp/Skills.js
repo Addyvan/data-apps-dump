@@ -33,7 +33,7 @@ class Skills extends React.Component {
     });
     var output = "";
     if (this.props.missions.length < 1) {
-      output = "No data for this selection";
+      output = "";
     } else {
       output = count;
     }

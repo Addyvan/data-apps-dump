@@ -4,7 +4,8 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap
 import classnames from 'classnames';
 
 import CollabOverview from "./collab/overview";
-import CollabCareerMP from "./collab/careermp";
+import CollabCareerMPExplorer from "./collab/careermpExplorer";
+import CollabCareerMPOverview from "./collab/careermpOverview";
 
 class Collab extends React.Component {
 
@@ -59,28 +60,28 @@ class Collab extends React.Component {
           </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="1">
-              <Row>
-                <Col sm="12" md="12" lg="12" className="tab-content">
-                  <CollabOverview />
-                </Col>
-              </Row>
-            </TabPane>
-            <TabPane tabId="2">
-              <Row>
-                <Col sm="12" md="12" lg="12" className="tab-content">
-                  Overview
-                </Col>
-              </Row>
-            </TabPane>
-            <TabPane tabId="3">
-              <Row>
-                <Col sm="12" md="12" lg="12" className="tab-content">
-                  <CollabCareerMP />
-                </Col>
-              </Row>
-            </TabPane>
-          </TabContent>
+          <TabPane tabId="1">
+            <Row>
+              <Col sm="12" md="12" lg="12" className="tab-content">
+                <CollabOverview />
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              <Col sm="12" md="12" lg="12" className="tab-content">
+                <CollabCareerMPOverview />
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tabId="3">
+            <Row>
+              <Col sm="12" md="12" lg="12" className="tab-content">
+                <CollabCareerMPExplorer />
+              </Col>
+            </Row>
+          </TabPane>
+        </TabContent>
       </div>
     );
   }

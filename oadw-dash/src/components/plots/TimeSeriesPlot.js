@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 
 class TimeSeriesPlot extends React.Component {
   render() {
-    console.log(this.props);
     return(
       <div>
         <Plot
@@ -22,6 +21,7 @@ class TimeSeriesPlot extends React.Component {
           layout={{
             autosize: false,
             title: this.props.title,
+            width: this.props.size.width,
             xaxis: {
               autorange: true,
               range: [this.props.x[0], this.props.x[this.props.x.length-1]],
@@ -51,7 +51,7 @@ class TimeSeriesPlot extends React.Component {
               t: 0,
               b: 0,
               l: 30,
-              r: 0
+              r: 30
             }
           }}
           config={{displayModeBar: false, responsive: true}}
